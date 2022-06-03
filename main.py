@@ -1,32 +1,35 @@
-abc_low = 'abcdefghijklmnopqrstuvwxyz'
-abc_up = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+# the program ciphers whole inputted phrase preserving the original punctuation and letter case
+# feature is a shift for cipher of each word is equal the length of the word
 
-phrase = input()
-phrase_lst = phrase.split()
-cypher_phrase_lst = []
-
-
-def define_shift_len(abc_low, abc_up, word):
+# the function counts length of each word to determine shift
+def define_shift(word):
+    abc = 'abcdefghijklmnopqrstuvwxyz'
     counter = 0
-    for c in word:
-        if c in abc_low or c in abc_up:
+    for letter in word:
+        if letter.lower() in abc:
             counter += 1
     return counter
 
 
-def shift_word(word, abc_up, abc_low, shift):
-    cypher_word = ''
+# func changes each letter to the letter in abc according to the passed shift value
+def cipher_word(word, shift):
+    abc = 'abcdefghijklmnopqrstuvwxyz'
+    cyphered_word = ''
     for i in range(len(word)):
-        if word[i] in abc_up:
-            cypher_word += abc_up[(abc_up.index(word[i]) + shift) % 26]
-        elif word[i] in abc_low:
-            cypher_word += abc_low[(abc_low.index(word[i]) + shift) % 26]
+        if word[i].lower() in abc:
+            if word[i].islower():
+                cyphered_word += abc[(abc.index(word[i]) + shift) % 26]
+            elif word[i].isupper():
+                cyphered_word += abc[(abc.index(word[i].lower()) + shift) % 26].upper()
         else:
-            cypher_word += word[i]
-    return cypher_word
+            cyphered_word += word[i]
+    return cyphered_word
 
 
+phrase = input()
+phrase_lst = phrase.split()
+cypher_phrase_lst = []
 for el in phrase_lst:
-    cypher_phrase_lst.append(shift_word(el, abc_up, abc_low, define_shift_len(abc_low, abc_up, el)))
+    cypher_phrase_lst.append(cipher_word(el, define_shift(el)))
 phrase = ' '.join(cypher_phrase_lst)
 print(phrase)
